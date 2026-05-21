@@ -3,6 +3,7 @@ import { format, isToday } from 'date-fns';
 import { COLOR_MAP } from '@/types/habit';
 import { useHabitStats } from '@/hooks/useHabitStats';
 import { useToast } from '@/context/toastContext';
+import { ProgressBar } from '@/components/ui/ProgressBar';
 import { cn } from '@/lib/utils';
 
 const LABEL = 'text-[10px] font-medium uppercase tracking-[0.07em] text-subtle';
@@ -42,9 +43,9 @@ export function StatsPanel() {
     <div className="flex flex-col gap-2">
       <div
         className={cn(
-          'grid grid-cols-3 divide-x overflow-hidden rounded-2xl border',
-          'border-edge divide-edge bg-surface',
-          allDoneToday && 'border-violet-500/30',
+          'grid grid-cols-3 divide-x overflow-hidden rounded-xl border shadow-card',
+          'border-edge divide-edge bg-surface transition-colors duration-500',
+          allDoneToday && 'border-violet-500/25 animate-celebrate',
         )}
       >
         {/* ── Today ── */}
@@ -63,6 +64,7 @@ export function StatsPanel() {
               </span>
             </p>
             <p className={cn(SUB, 'mt-1')}>{percent}% complete</p>
+            <ProgressBar value={percent} className="mt-2.5" />
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -13,14 +14,14 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useHabits } from '@/context/useHabits';
-import HabitItem from './habitItem';
-import { EmptyState } from './EmptyState';
+import { HabitItem } from './HabitItem';
+import { HabitsEmptyState } from '@/components/EmptyState';
 
 interface HabitListProps {
   visibleDates: Date[];
 }
 
-export default function HabitList({ visibleDates }: HabitListProps) {
+function HabitListComponent({ visibleDates }: HabitListProps) {
   const { habits, reorderHabits } = useHabits();
 
   const sensors = useSensors(
@@ -30,16 +31,21 @@ export default function HabitList({ visibleDates }: HabitListProps) {
     }),
   );
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (over && active.id !== over.id) {
-      const oldIndex = habits.findIndex((h) => h.id === active.id);
-      const newIndex = habits.findIndex((h) => h.id === over.id);
-      reorderHabits(oldIndex, newIndex);
-    }
-  }
+  const habitIds = useMemo(() => habits.map((h) => h.id), [habits]);
 
-  if (habits.length === 0) return <EmptyState />;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (over && active.id !== over.id) {
+        const oldIndex = habits.findIndex((h) => h.id === active.id);
+        const newIndex = habits.findIndex((h) => h.id === over.id);
+        reorderHabits(oldIndex, newIndex);
+      }
+    },
+    [habits, reorderHabits],
+  );
+
+  if (habits.length === 0) return <HabitsEmptyState />;
 
   return (
     <DndContext
@@ -47,16 +53,14 @@ export default function HabitList({ visibleDates }: HabitListProps) {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext
-        items={habits.map((h) => h.id)}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={habitIds} strategy={verticalListSortingStrategy}>
         <section className="flex flex-col gap-2" aria-label="Habits list">
-          {habits.map((habit) => (
+          {habits.map((habit, index) => (
             <HabitItem
               key={habit.id}
               habit={habit}
               visibleDates={visibleDates}
+              index={index}
             />
           ))}
         </section>
@@ -64,3 +68,5 @@ export default function HabitList({ visibleDates }: HabitListProps) {
     </DndContext>
   );
 }
+
+export const HabitList = memo(HabitListComponent);

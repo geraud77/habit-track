@@ -32,7 +32,7 @@ export function ToastContainer() {
     <div
       aria-live="polite"
       aria-label="Notifications"
-      className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 sm:bottom-6 sm:right-6"
+      className="fixed bottom-20 right-4 z-50 flex flex-col gap-2 pb-[env(safe-area-inset-bottom)] md:bottom-6 md:right-6"
     >
       {toasts.map((t) => {
         const { icon: Icon, iconClass, borderClass } = variantConfig[t.variant];
@@ -42,8 +42,7 @@ export function ToastContainer() {
             role="status"
             className={cn(
               'flex items-center gap-3 rounded-xl border px-4 py-3 shadow-2xl',
-              'bg-zinc-950 text-zinc-100',
-              'animate-in slide-in-from-bottom-2 fade-in duration-200',
+              'bg-zinc-950 text-zinc-100 animate-toast-in',
               borderClass,
             )}
           >

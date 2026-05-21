@@ -3,6 +3,7 @@ import { isSameDay } from 'date-fns';
 import { arrayMove } from '@dnd-kit/sortable';
 import { HabitContext } from './useHabits';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useAppReady } from '@/hooks/useAppReady';
 import { useToast } from '@/context/toastContext';
 import type { Habit, HabitColor } from '@/types/habit';
 import { sampleHabits } from '@/lib/sampleData';
@@ -10,7 +11,8 @@ import { sampleHabits } from '@/lib/sampleData';
 export type { Habit };
 
 function HabitProvider({ children }: { children: ReactNode }) {
-  const [habits, setHabits] = useLocalStorage<Habit[]>('habits-v2', sampleHabits);
+  const [habits, setHabits] = useLocalStorage<Habit[]>('habits-v2', []);
+  const isReady = useAppReady();
   const { toast } = useToast();
 
   const addHabit = useCallback(
@@ -26,15 +28,13 @@ function HabitProvider({ children }: { children: ReactNode }) {
 
   const deleteHabit = useCallback(
     (id: string) => {
-      // Read name from the current closure — safe here because this function
-      // is only called from synchronous user events (button clicks), never
-      // from async paths where the closure could be stale.
-      const target = habits.find((h) => h.id === id);
-      setHabits((current) => current.filter((h) => h.id !== id));
-      if (target) toast(`"${target.name}" removed`, 'info');
+      setHabits((current) => {
+        const target = current.find((h) => h.id === id);
+        if (target) toast(`"${target.name}" removed`, 'info');
+        return current.filter((h) => h.id !== id);
+      });
     },
-    // habits is intentionally in deps: we need the latest value for the name lookup.
-    [habits, setHabits, toast],
+    [setHabits, toast],
   );
 
   const toggleHabitCompletion = useCallback(
@@ -60,11 +60,37 @@ function HabitProvider({ children }: { children: ReactNode }) {
     [setHabits],
   );
 
-  // Stable object reference — only changes when habits identity or a mutation
-  // function reference changes.
+  const clearAllHabits = useCallback(() => {
+    setHabits([]);
+    toast('All habits cleared', 'info');
+  }, [setHabits, toast]);
+
+  const loadDemoHabits = useCallback(() => {
+    setHabits(sampleHabits);
+    toast('Demo habits loaded', 'info');
+  }, [setHabits, toast]);
+
   const value = useMemo(
-    () => ({ habits, addHabit, deleteHabit, toggleHabitCompletion, reorderHabits }),
-    [habits, addHabit, deleteHabit, toggleHabitCompletion, reorderHabits],
+    () => ({
+      isReady,
+      habits,
+      addHabit,
+      deleteHabit,
+      toggleHabitCompletion,
+      reorderHabits,
+      clearAllHabits,
+      loadDemoHabits,
+    }),
+    [
+      isReady,
+      habits,
+      addHabit,
+      deleteHabit,
+      toggleHabitCompletion,
+      reorderHabits,
+      clearAllHabits,
+      loadDemoHabits,
+    ],
   );
 
   return <HabitContext value={value}>{children}</HabitContext>;

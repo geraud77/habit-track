@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { format, isFuture, isSameDay, isToday } from 'date-fns';
 import { Trash2, GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
@@ -8,12 +9,13 @@ import type { Habit } from '@/types/habit';
 import { getStreak } from '@/lib/habits';
 import { cn } from '@/lib/utils';
 
-interface HabitItemProps {
+export interface HabitItemProps {
   habit: Habit;
   visibleDates: Date[];
+  index?: number;
 }
 
-export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
+function HabitItemComponent({ habit, visibleDates, index = 0 }: HabitItemProps) {
   const { deleteHabit, toggleHabitCompletion } = useHabits();
   const {
     attributes,
@@ -28,7 +30,6 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
   const colors = COLOR_MAP[habit.color];
   const streak = getStreak(habit.completions);
 
-  // Count applicable days (today or earlier) for the week fraction display.
   const weekDone = visibleDates.filter((d) =>
     habit.completions.some((c) => isSameDay(c, d)),
   ).length;
@@ -37,27 +38,27 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={{
+        ...style,
+        animationDelay: `${index * 40}ms`,
+      }}
       className={cn(
-        'group rounded-2xl border transition-all duration-150',
-        'border-edge bg-surface',
-        'hover:border-edge-strong hover:bg-surface-raised',
-        isDragging && 'z-10 shadow-2xl shadow-black/20 opacity-95 border-edge-strong',
+        'group animate-fade-up interactive-card rounded-xl border',
+        'border-edge bg-surface shadow-card',
+        isDragging && 'z-10 opacity-95 shadow-lg shadow-black/15 border-edge-strong',
       )}
       {...attributes}
     >
       <div className="flex flex-col gap-3 p-4">
-
-        {/* ── Title row ── */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
-
             <button
+              type="button"
               {...listeners}
               aria-label="Drag to reorder"
               className={cn(
                 'shrink-0 cursor-grab text-subtle active:cursor-grabbing',
-                'opacity-0 group-hover:opacity-100 transition-opacity hover:text-muted-foreground',
+                'opacity-0 transition-opacity group-hover:opacity-100 hover:text-muted-foreground',
               )}
             >
               <GripVertical size={14} />
@@ -89,11 +90,12 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
               </span>
             )}
             <button
+              type="button"
               onClick={() => deleteHabit(habit.id)}
               aria-label={`Delete ${habit.name}`}
               className={cn(
                 'rounded-md p-1 text-subtle',
-                'opacity-0 group-hover:opacity-100 transition-all duration-150',
+                'opacity-0 transition-all duration-150 group-hover:opacity-100',
                 'hover:bg-rose-500/10 hover:text-rose-500',
               )}
             >
@@ -102,7 +104,6 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
           </div>
         </div>
 
-        {/* ── Day buttons row ── */}
         <div className="flex gap-1">
           {visibleDates.map((date) => {
             const completed = habit.completions.some((d) => isSameDay(date, d));
@@ -112,25 +113,25 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
             return (
               <button
                 key={date.toISOString()}
+                type="button"
                 disabled={future}
                 onClick={() => toggleHabitCompletion(habit.id, date)}
                 aria-label={`${format(date, 'EEEE, MMM d')} — ${completed ? 'completed' : 'incomplete'}`}
                 aria-pressed={completed}
                 className={cn(
                   'relative flex flex-1 flex-col items-center gap-[5px]',
-                  'rounded-xl py-[9px] px-1 select-none',
-                  'border transition-all duration-150',
-                  // Focus ring for keyboard navigation
+                  'rounded-xl border px-1 py-[9px] select-none',
+                  'transition-all duration-150 active:scale-[0.94]',
                   'focus-visible:outline-none focus-visible:ring-2',
                   'focus-visible:ring-violet-500/60 focus-visible:ring-offset-1',
                   'focus-visible:ring-offset-transparent',
                   completed
-                    ? [colors.dayButtonActive, 'border-transparent']
+                    ? [colors.dayButtonActive, 'border-transparent', 'animate-day-complete']
                     : today
                       ? 'border-edge-strong bg-surface-raised text-foreground hover:bg-surface-hover'
                       : 'border-transparent bg-transparent text-subtle hover:bg-surface hover:text-muted-foreground',
-                  colors.dayButton,
-                  future && 'cursor-not-allowed opacity-[0.18] pointer-events-none',
+                  !completed && colors.dayButton,
+                  future && 'pointer-events-none cursor-not-allowed opacity-[0.18]',
                 )}
               >
                 <span
@@ -142,7 +143,6 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
                 >
                   {format(date, 'EEE')}
                 </span>
-
                 <span
                   className={cn(
                     'text-[15px] font-semibold leading-none tracking-[-0.02em]',
@@ -151,8 +151,6 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
                 >
                   {format(date, 'd')}
                 </span>
-
-                {/* Dot marks today when not yet completed */}
                 {today && !completed && (
                   <span className="absolute bottom-[5px] size-[3px] rounded-full bg-violet-500" />
                 )}
@@ -160,8 +158,9 @@ export default function HabitItem({ habit, visibleDates }: HabitItemProps) {
             );
           })}
         </div>
-
       </div>
     </div>
   );
 }
+
+export const HabitItem = memo(HabitItemComponent);

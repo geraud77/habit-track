@@ -12,6 +12,10 @@ export function useTheme() {
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
+    const meta = document.querySelector('meta[name="theme-color"]:not([media])');
+    if (meta) {
+      meta.setAttribute('content', theme === 'dark' ? '#0a0a0f' : '#f8f8f8');
+    }
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
