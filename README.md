@@ -2,7 +2,7 @@
 
 **A portfolio-grade habit tracker that looks and feels like a funded SaaS product.**
 
-HabitFlow combines a Product Hunt–style marketing homepage with a polished in-app experience: dashboard, analytics, AI-style insights, calendar, command palette, and full keyboard shortcuts — all built with React 19, TypeScript, and Tailwind CSS v4. Data stays on-device via localStorage; no backend required.
+HabitFlow combines a marketing homepage with a polished in-app experience: dashboard, analytics, AI-style insights, calendar, command palette, and full keyboard shortcuts — all built with React 19, TypeScript, and Tailwind CSS v4. Data stays on-device via localStorage; no backend required.
 
 ---
 
@@ -31,7 +31,7 @@ npm run lint     # ESLint
 
 | Area | What you get |
 |------|----------------|
-| **Marketing site** | Hero, product screenshots, features, testimonials, pricing, footer — natural page scroll |
+| **Marketing site** | Hero, product screenshots, features, pricing, footer — natural page scroll |
 | **Dashboard** | Daily progress ring, focus/consistency scores, weekly chart, mini heatmap, AI insights, today’s habits |
 | **Habits** | Weekly grid, streak badges, drag-and-drop reorder, color picker, `/` to focus add-habit |
 | **Analytics** | Weekly trend, monthly completion, consistency heatmap, streak analytics |

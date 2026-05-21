@@ -18,8 +18,8 @@ export function LandingFooter() {
               <span className="text-[14px] font-semibold text-foreground">HabitFlow</span>
             </div>
             <p className="mt-3 max-w-xs text-[13px] leading-relaxed text-subtle">
-              A premium habit tracker built for portfolios and daily use. React 19,
-              TypeScript, Tailwind v4, local-first.
+              Track habits, streaks, and weekly progress in your browser. Your data
+              stays in local storage on your device.
             </p>
             <button
               type="button"
@@ -37,7 +37,7 @@ export function LandingFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-edge pt-8 sm:flex-row">
           <p className="text-[12px] text-subtle">
-            © {year} HabitFlow. Built as an open portfolio project.
+            © {year} HabitFlow. Open source habit tracker.
           </p>
           <a
             href="https://github.com"

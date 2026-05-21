@@ -15,8 +15,8 @@ export function ProductShowcase() {
             Every screen, thoughtfully crafted
           </h2>
           <p className="mt-4 text-[16px] leading-relaxed text-subtle">
-            From your morning dashboard to deep analytics — the interfaces recruiters
-            click through first.
+            See how you check in on habits, review your progress, and read insights
+            from the same app.
           </p>
         </div>
 

@@ -9,9 +9,9 @@ import {
 } from 'lucide-react';
 
 export const LANDING_STATS = [
-  { value: '12k+', label: 'Daily check-ins logged' },
-  { value: '94%', label: 'Avg. weekly completion' },
-  { value: '<50ms', label: 'Local-first latency' },
+  { value: '$0', label: 'Free to use' },
+  { value: '100%', label: 'Data stays on your device' },
+  { value: '∞', label: 'Unlimited habits' },
 ] as const;
 
 export const FEATURES: {
@@ -53,30 +53,30 @@ export const FEATURES: {
     icon: Keyboard,
     title: 'Built for speed',
     description:
-      'Command palette, global search, and dark mode — polished like a modern SaaS product.',
+      'Command palette, keyboard shortcuts, and dark mode for quick daily check-ins.',
   },
 ];
 
 export const TESTIMONIALS = [
   {
     quote:
-      'HabitFlow feels like Linear for habits — fast, minimal, and genuinely pleasant to open every morning.',
+      'I open it every morning, tap my habits for the week, and the streak badges keep me honest. Simple and fast.',
     name: 'Jordan Lee',
     role: 'Product Designer',
     initials: 'JL',
   },
   {
     quote:
-      'The analytics heatmap alone helped me see I was skipping weekends. Fixed my routine in two weeks.',
+      'The analytics heatmap showed I was skipping weekends. I adjusted my routine and my completion rate went up within two weeks.',
     name: 'Samira Patel',
     role: 'Software Engineer',
     initials: 'SP',
   },
   {
     quote:
-      'I shipped this as my portfolio centerpiece. Recruiters actually asked to click through the demo.',
+      'Having dashboard, calendar, and insights in one place beats juggling three different apps for the same habits.',
     name: 'Alex Morgan',
-    role: 'CS Student · Builder',
+    role: 'Daily user',
     initials: 'AM',
   },
 ] as const;
@@ -109,7 +109,7 @@ export const PRICING_PLANS = [
     features: [
       'Everything in Starter',
       'Cloud sync across devices',
-      'Export to Notion & CSV',
+      'Export habits as JSON',
       'Custom reminders',
       'Priority insight models',
     ],

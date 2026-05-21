@@ -8,10 +8,10 @@ export function TestimonialsSection() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="label mb-3">Testimonials</p>
           <h2 className="text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold tracking-[-0.03em] text-foreground">
-            Loved by builders and designers
+            What people use it for
           </h2>
           <p className="mt-4 text-[15px] text-subtle">
-            The kind of feedback you&apos;d expect after a Product Hunt launch.
+            Everyday routines, fitness, reading, sleep — one place to stay consistent.
           </p>
         </div>
 

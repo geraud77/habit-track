@@ -1,7 +1,5 @@
 import { LandingNav } from '@/components/landing/LandingNav';
-import { LandingBadgeStrip } from '@/components/landing/LandingBadgeStrip';
 import { HeroSection } from '@/components/landing/HeroSection';
-import { SocialProofStrip } from '@/components/landing/SocialProofStrip';
 import { ProductShowcase } from '@/components/landing/ProductShowcase';
 import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
@@ -19,8 +17,6 @@ export function LandingPage() {
       <LandingNav />
       <main>
         <HeroSection onScrollToProduct={scrollToProduct} />
-        <LandingBadgeStrip />
-        <SocialProofStrip />
         <ProductShowcase />
         <FeaturesSection />
         <TestimonialsSection />

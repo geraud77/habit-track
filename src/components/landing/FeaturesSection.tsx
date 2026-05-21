@@ -7,11 +7,11 @@ export function FeaturesSection() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="label mb-3">Features</p>
           <h2 className="text-[clamp(1.75rem,3.5vw,2.5rem)] font-semibold tracking-[-0.03em] text-foreground">
-            Everything a funded habit app ships on day one
+            Built for daily habit tracking
           </h2>
           <p className="mt-4 text-[16px] leading-relaxed text-subtle">
-            No clutter. No gamification noise. Just clarity, streaks, and insights
-            that help you improve — the way Notion or Linear would do habits.
+            Log completions, review streaks, and spot patterns over time — without
+            signing up or sending your data to a server.
           </p>
         </div>
 

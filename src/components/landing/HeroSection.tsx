@@ -35,7 +35,7 @@ export function HeroSection({ onScrollToProduct }: HeroSectionProps) {
               </span>
               <Sparkles size={12} className="text-violet-400" aria-hidden />
               <span className="text-[11px] font-medium text-violet-300">
-                Now in public beta — habit tracking, reimagined
+                Free habit tracker — no account required
               </span>
             </div>
 
@@ -45,9 +45,9 @@ export function HeroSection({ onScrollToProduct }: HeroSectionProps) {
             </h1>
 
             <p className="mt-6 text-[17px] leading-[1.6] text-subtle">
-              HabitFlow is the calm, data-rich habit OS for people who love
-              Linear-grade UX — analytics, AI insights, streaks, and a command
-              palette in one polished dashboard.
+              Track daily habits, keep streaks alive, and see what&apos;s working in
+              your week — with a dashboard, analytics, calendar, and insights
+              built from your own completion history.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">

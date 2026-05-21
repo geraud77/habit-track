@@ -32,8 +32,8 @@ export function PricingSection() {
             Simple plans. No surprise fees.
           </h2>
           <p className="mt-4 text-[16px] text-subtle">
-            Starter is free forever. Pro tiers reflect a real SaaS roadmap — shown
-            here for portfolio realism.
+            The full app is free today. Paid tiers are placeholders for sync and
+            reminders if you add them later.
           </p>
         </div>
 
