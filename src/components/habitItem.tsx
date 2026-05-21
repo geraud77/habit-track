@@ -1,24 +1,25 @@
 import { Button } from "./ui/button";
-import { endOfWeek, format, isFuture, startOfWeek } from "date-fns";
-import { eachDayOfInterval } from "date-fns";
-import type { Habit } from "./habitList";
+import { format, isFuture, isSameDay, subDays } from "date-fns";
 
+import { useHabits } from "@/context/useHabits";
+import type { Habit } from "@/context/habitProvider";
+
+// this interface will define the props for the habit item
 interface HabitItemProps {
   habit: Habit;
-  deleteHabit: (id: string) => void;
+  visibleDates: Date[];
 }
 
-function HabitItem({ habit, deleteHabit }: HabitItemProps) {
-  const visibleDates = eachDayOfInterval({
-    start: startOfWeek(new Date(), { weekStartsOn: 1 }),
-    end: endOfWeek(new Date(), { weekStartsOn: 1 }),
-  });
+function HabitItem({ habit, visibleDates }: HabitItemProps) {
+  const { deleteHabit, toggleHabitCompletion } = useHabits();
+
+  const streak = getStreak(habit.completions);
   return (
     <section className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <span>{habit.name}</span>
-          <span className="text-amber-400">🔥2</span>
+          {streak !== 0 && <span className="text-amber-400">🔥{streak}</span>}
         </div>
         <div>
           <Button
@@ -35,8 +36,13 @@ function HabitItem({ habit, deleteHabit }: HabitItemProps) {
           <Button
             size="icon-lg"
             disabled={isFuture(date)}
+            onClick={() => toggleHabitCompletion(habit.id, date)}
             key={date.toISOString()}
-            variant="purple"
+            variant={
+              habit.completions.some((d) => isSameDay(date, d))
+                ? "purple"
+                : "default"
+            }
             className="flex flex-1 items-center flex-col text-xs rounded-lg gap-0.5"
           >
             <span>{format(date, "EEE")}</span>
@@ -46,6 +52,17 @@ function HabitItem({ habit, deleteHabit }: HabitItemProps) {
       </div>
     </section>
   );
+}
+
+// this function will get the streak of a habit
+function getStreak(completions: Date[]) {
+  let streak = 0;
+  let date = new Date();
+  while (completions.some((d) => isSameDay(d, date))) {
+    streak++;
+    date = subDays(date, 1);
+  }
+  return streak;
 }
 
 export default HabitItem;

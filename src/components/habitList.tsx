@@ -1,16 +1,13 @@
 import { Card } from "./ui/card";
 import HabitItem from "./habitItem";
+import { useHabits } from "@/context/useHabits";
 
-export interface Habit {
-  id: string;
-  name: string;
-}
 interface HabitListProps {
-  habits: Habit[];
-  deleteHabit: (id: string) => void;
+  visibleDates: Date[];
 }
 
-function HabitList({ habits, deleteHabit }: HabitListProps) {
+function HabitList({ visibleDates }: HabitListProps) {
+  const { habits } = useHabits();
   if (habits.length === 0) {
     return (
       <p className="text-center text-zinc-500 py-12">
@@ -22,7 +19,7 @@ function HabitList({ habits, deleteHabit }: HabitListProps) {
     <section className="flex flex-col gap-4">
       {habits.map((habit) => (
         <Card key={habit.id} className="bg-zinc-800 text-zinc-100 p-4">
-          <HabitItem key={habit.id} habit={habit} deleteHabit={deleteHabit} />
+          <HabitItem key={habit.id} habit={habit} visibleDates={visibleDates} />
         </Card>
       ))}
     </section>

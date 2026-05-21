@@ -1,14 +1,16 @@
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState, type SubmitEvent } from "react";
+import { useHabits } from "@/context/useHabits";
 
-interface HabitFormProps {
-  addHabit: (name: string) => void;
-}
+// this interface will define the props for the habit form
 
-function HabitForm({ addHabit }: HabitFormProps) {
+// this component will render the habit form
+function HabitForm() {
   const [name, setName] = useState("");
+  const { addHabit } = useHabits();
 
+  // this function will handle the submission of the form
   function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
     if (!name) return;
