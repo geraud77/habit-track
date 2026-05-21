@@ -1,20 +1,18 @@
-import { useContext } from "react";
-import { type Habit } from "./habitProvider";
-import { createContext } from "react";
+import { useContext, createContext } from 'react';
+import type { Habit, HabitColor } from '@/types/habit';
 
-interface Context {
+interface HabitContextValue {
   habits: Habit[];
-  addHabit: (name: string) => void;
+  addHabit: (name: string, color: HabitColor) => void;
   deleteHabit: (id: string) => void;
   toggleHabitCompletion: (id: string, date: Date) => void;
+  reorderHabits: (fromIndex: number, toIndex: number) => void;
 }
 
-export const HabitContext = createContext<null | Context>(null);
+export const HabitContext = createContext<HabitContextValue | null>(null);
 
 export function useHabits() {
-  const habitsContext = useContext(HabitContext);
-  if (habitsContext === null) {
-    throw new Error("useHabits must be used within a HabitProvider");
-  }
-  return habitsContext;
+  const ctx = useContext(HabitContext);
+  if (!ctx) throw new Error('useHabits must be used within a HabitProvider');
+  return ctx;
 }

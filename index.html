@@ -1,10 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>habit-tracker</title>
+    <meta name="description" content="Track daily habits with streaks, analytics, and drag-and-drop ordering. Built with React 19 and TypeScript." />
+    <meta name="theme-color" content="#0a0a0f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8f8f8" media="(prefers-color-scheme: light)" />
+    <title>Habit Tracker</title>
+
+    <!-- Prevents flash of wrong theme on load by reading localStorage
+         and applying the correct class before React mounts. -->
+    <script>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var isDark = stored ? stored === "dark" : prefersDark;
+        document.documentElement.classList.toggle("dark", isDark);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

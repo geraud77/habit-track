@@ -1,29 +1,66 @@
-import { Card } from "./ui/card";
-import HabitItem from "./habitItem";
-import { useHabits } from "@/context/useHabits";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useHabits } from '@/context/useHabits';
+import HabitItem from './habitItem';
+import { EmptyState } from './EmptyState';
 
 interface HabitListProps {
   visibleDates: Date[];
 }
 
-function HabitList({ visibleDates }: HabitListProps) {
-  const { habits } = useHabits();
-  if (habits.length === 0) {
-    return (
-      <p className="text-center text-zinc-500 py-12">
-        No habits yet. Add one above to get started!
-      </p>
-    );
+export default function HabitList({ visibleDates }: HabitListProps) {
+  const { habits, reorderHabits } = useHabits();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = habits.findIndex((h) => h.id === active.id);
+      const newIndex = habits.findIndex((h) => h.id === over.id);
+      reorderHabits(oldIndex, newIndex);
+    }
   }
+
+  if (habits.length === 0) return <EmptyState />;
+
   return (
-    <section className="flex flex-col gap-4">
-      {habits.map((habit) => (
-        <Card key={habit.id} className="bg-zinc-800 text-zinc-100 p-4">
-          <HabitItem key={habit.id} habit={habit} visibleDates={visibleDates} />
-        </Card>
-      ))}
-    </section>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={habits.map((h) => h.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <section className="flex flex-col gap-2" aria-label="Habits list">
+          {habits.map((habit) => (
+            <HabitItem
+              key={habit.id}
+              habit={habit}
+              visibleDates={visibleDates}
+            />
+          ))}
+        </section>
+      </SortableContext>
+    </DndContext>
   );
 }
-
-export default HabitList;
